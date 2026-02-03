@@ -100,7 +100,7 @@
       if (sender === "You") {
         div.innerHTML = "<span class='user'>You:</span> " + text;
       } else {
-        div.innerHTML = "<span class='bot'>Therapist:</span> " + text;
+        div.innerHTML = "<span class='bot'>AI Support:</span> " + text;
       }
 
       chat.appendChild(div);
@@ -125,7 +125,7 @@
           messages: [
             {
               role: "system",
-              content: "You are a calm, empathetic, non-judgmental therapist. You listen carefully, validate emotions, reflect feelings, ask gentle open-ended questions, avoid diagnoses, and speak in a warm, human tone."
+              content: "You are an AI providing supportive, therapeutic-style conversation. You are not a licensed therapist and do not replace professional mental health care. Your role is to listen carefully, validate emotions, reflect feelings, ask gentle open-ended questions, avoid diagnoses, and speak in a warm, human tone."
             },
             {
               role: "user",
@@ -157,6 +157,7 @@ addMessage("Therapist", reply);
   </script>
 </body>
 </html>
+
 
 
 
