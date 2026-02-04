@@ -37,6 +37,21 @@
       margin-bottom: 12px;
       line-height: 1.4;
     }
+    .user-message {
+  background: #DCF8C6;
+  align-self: flex-end;
+  border-radius: 12px 12px 0 12px;
+  padding: 10px 12px;
+  max-width: 80%;
+}
+
+   .bot-message {
+  background: #F1F0F0;
+  align-self: flex-start;
+  border-radius: 12px 12px 12px 0;
+  padding: 10px 12px;
+  max-width: 80%;
+}
 
     textarea {
       width: 100%;
@@ -70,6 +85,21 @@
       margin-top: 16px;
       text-align: center;
     }
+#chat {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+  max-height: 50vh;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.input-area {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
   </style>
 </head>
 
@@ -79,8 +109,11 @@
 
     <div id="chat"></div>
 
-    <textarea id="userInput" placeholder="What’s going on right now?"></textarea>
-    <button onclick="sendMessage()">Send</button>
+<div class="input-area">
+  <textarea id="userInput" placeholder="What’s going on right now?"></textarea>
+  <button onclick="sendMessage()">Send</button>
+</div>
+
 
     <div class="disclaimer">
       This isn’t a replacement for professional care — just a supportive space to talk.
@@ -111,19 +144,14 @@ Your goal is to help the user feel understood, less alone, and a little clearer 
       }
     ];
 
-    function addMessage(sender, text) {
-      const div = document.createElement("div");
-      div.className = "message";
+function addMessage(sender, text) {
+  const div = document.createElement("div");
+  div.className = sender === "You" ? "message user-message" : "message bot-message";
+  div.innerHTML = text;
 
-      if (sender === "You") {
-        div.innerHTML = "<strong>You:</strong> " + text;
-      } else {
-        div.innerHTML = "<strong>AI Support:</strong> " + text;
-      }
-
-      chat.appendChild(div);
-      chat.scrollTop = chat.scrollHeight;
-    }
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
 
     async function sendMessage() {
       const text = userInput.value.trim();
@@ -176,3 +204,4 @@ Your goal is to help the user feel understood, less alone, and a little clearer 
   </script>
 </body>
 </html>
+
