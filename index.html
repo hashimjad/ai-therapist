@@ -6,71 +6,71 @@
   <title>A safe space to talk 💬 (Test Phase)</title>
 
   <style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #f5f5f5;
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-  .chat-container {
-    width: 100%;
-    max-width: 600px;
-    background: white;
-    padding: 16px;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    box-sizing: border-box;
-    margin: 16px;
-  }
+    .chat-container {
+      width: 100%;
+      max-width: 600px;
+      background: white;
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-sizing: border-box;
+      margin: 16px;
+    }
 
-  h2 {
-    text-align: center;
-    margin-top: 0;
-  }
+    h2 {
+      text-align: center;
+      margin-top: 0;
+    }
 
-  .message {
-    margin-bottom: 12px;
-    line-height: 1.4;
-  }
+    .message {
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
 
-  textarea {
-    width: 100%;
-    height: 100px;
-    padding: 12px;
-    font-size: 16px;
-    box-sizing: border-box;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-  }
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 12px;
+      font-size: 16px;
+      box-sizing: border-box;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
 
-  button {
-    margin-top: 12px;
-    width: 100%;
-    padding: 14px;
-    font-size: 16px;
-    background: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-  }
+    button {
+      margin-top: 12px;
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
 
-  button:hover {
-    background: #45a049;
-  }
+    button:hover {
+      background: #45a049;
+    }
 
-  .disclaimer {
-    font-size: 12px;
-    color: #777;
-    margin-top: 16px;
-    text-align: center;
-  }
-</style>
+    .disclaimer {
+      font-size: 12px;
+      color: #777;
+      margin-top: 16px;
+      text-align: center;
+    }
+  </style>
 </head>
 
 <body>
@@ -88,19 +88,37 @@
   </div>
 
   <script>
-    const API_KEY = "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";
+    const API_KEY = "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";
 
     const chat = document.getElementById("chat");
     const userInput = document.getElementById("userInput");
+
+    // 🔹 Conversation memory (SHORT-TERM)
+    let conversationHistory = [
+      {
+        role: "system",
+        content: `You are an AI that offers supportive, therapeutic-style conversations. You are not a licensed therapist and do not replace professional mental health care.
+
+You speak like a calm, emotionally intelligent best friend who deeply understands psychology, the human mind, emotions, and behavior, grounded in science. You don’t show off knowledge — you use it quietly to respond with clarity, insight, and care.
+
+Your tone is warm, present, and slightly casual — never cold, never overly cheerful. Use simple, natural language, contractions, and short, clear paragraphs.
+
+Listen closely, reflect what the person is feeling (even when they struggle to name it), validate their emotional experience, and help them feel genuinely heard. Ask gentle, meaningful questions that invite reflection rather than push for answers.
+
+Do not diagnose or label. Do not replace therapy. Avoid direct advice unless the user clearly asks for it.
+
+Your goal is to help the user feel understood, less alone, and a little clearer than before.`
+      }
+    ];
 
     function addMessage(sender, text) {
       const div = document.createElement("div");
       div.className = "message";
 
       if (sender === "You") {
-        div.innerHTML = "<span class='user'>You:</span> " + text;
+        div.innerHTML = "<strong>You:</strong> " + text;
       } else {
-        div.innerHTML = "<span class='bot'>AI Support:</span> " + text;
+        div.innerHTML = "<strong>AI Support:</strong> " + text;
       }
 
       chat.appendChild(div);
@@ -114,6 +132,12 @@
       addMessage("You", text);
       userInput.value = "";
 
+      // 🔹 Add user message to memory
+      conversationHistory.push({
+        role: "user",
+        content: text
+      });
+
       const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -122,59 +146,33 @@
         },
         body: JSON.stringify({
           model: "llama-3.1-8b-instant",
-          messages: [
-            {
-              role: "system",
-              content: `You are an AI that offers supportive, therapeutic-style conversations. You are not a licensed therapist and do not replace professional mental health care.
-
-You speak like a calm, emotionally intelligent best friend who also deeply understands psychology, the human mind, emotions, and behavior, grounded in science and research. You don’t show off knowledge, but you use it quietly to respond with clarity, insight, and care.
-
-Your tone is warm, present, and slightly casual — never cold, never overly cheerful. Use simple, natural language, contractions, and short, clear paragraphs. Sound human, thoughtful, and attentive.
-
-Your role is to listen closely, reflect what the person is feeling (even when they struggle to name it), validate their emotional experience, and help them feel genuinely heard. Ask gentle, meaningful questions that invite reflection rather than push for answers.
-
-You do not diagnose, label conditions, or present yourself as a replacement for therapy. You avoid giving direct advice unless the user clearly asks for it. When helpful, you may explain emotional patterns or mental processes in a grounded, accessible way, without jargon.
-
-Your goal is to help the user feel understood, less alone, and a little clearer than before.`
-            },
-            {
-              role: "user",
-              content: text
-            }
-          ],
+          messages: conversationHistory,
           temperature: 0.7
         })
       });
 
       if (!response.ok) {
-  addMessage("Therapist", "Something went wrong. Please check the console.");
-  console.error(await response.text());
-  return;
-}
+        addMessage("AI Support", "Something went wrong. Please try again.");
+        console.error(await response.text());
+        return;
+      }
 
-const data = await response.json();
+      const data = await response.json();
+      const reply = data.choices[0].message.content;
 
-if (!data.choices || !data.choices[0]) {
-  addMessage("Therapist", "No response from AI.");
-  console.error(data);
-  return;
-}
+      addMessage("AI Support", reply);
 
-const reply = data.choices[0].message.content;
-addMessage("Therapist", reply);
+      // 🔹 Add AI reply to memory
+      conversationHistory.push({
+        role: "assistant",
+        content: reply
+      });
 
+      // 🔹 Keep memory short (prevents overload)
+      if (conversationHistory.length > 12) {
+        conversationHistory.splice(1, 2);
+      }
     }
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
