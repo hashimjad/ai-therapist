@@ -125,7 +125,7 @@
 
   <script>
     const API_KEY = "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";
-
+    const AI_NAME = "Blue";
     const chat = document.getElementById("chat");
     const userInput = document.getElementById("userInput");
 
@@ -146,6 +146,14 @@ Do not diagnose or label. Do not replace therapy. Avoid direct advice unless the
 Your goal is to help the user feel understood, less alone, and a little clearer than before.`
       }
     ];
+    const welcomeMessages = [
+  `Hey, I’m ${AI_NAME}. I’m here to offer support and a safe space to talk. Take your time — we can start whenever you feel ready.`,
+  `Hi, I’m ${AI_NAME}. Make yourself comfortable. You don’t have to have the right words — we can figure things out together.`,
+  `Hello, I’m ${AI_NAME}. I’m here with you. There’s no rush — talk when it feels right.`,
+  `Hey there. I’m ${AI_NAME}, your AI mental health support. This is a judgment-free space — we can take it one step at a time.`,
+  `Hi, I’m ${AI_NAME}. You’re welcome to share as much or as little as you want. I’m here to listen.`
+];
+
 
 function addMessage(sender, text) {
   const div = document.createElement("div");
@@ -204,9 +212,23 @@ function addMessage(sender, text) {
         conversationHistory.splice(1, 2);
       }
     }
+    // 🔹 Show a welcome message on first load
+(function showWelcomeMessage() {
+  const message =
+    welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)];
+
+  addMessage("AI", message);
+
+  // Add to memory so AI remembers it introduced itself
+  conversationHistory.push({
+    role: "assistant",
+    content: message
+  });
+})();
   </script>
 </body>
 </html>
+
 
 
 
