@@ -147,13 +147,29 @@ Your goal is to help the user feel understood, less alone, and a little clearer 
       }
     ];
     const welcomeMessages = [
-  `Hey, I’m ${AI_NAME}. I’m here to offer support and a safe space to talk. Take your time — we can start whenever you feel ready.`,
-  `Hi, I’m ${AI_NAME}. Make yourself comfortable. You don’t have to have the right words — we can figure things out together.`,
-  `Hello, I’m ${AI_NAME}. I’m here with you. There’s no rush — talk when it feels right.`,
-  `Hey there. I’m ${AI_NAME}, your AI mental health support. This is a judgment-free space — we can take it one step at a time.`,
-  `Hi, I’m ${AI_NAME}. You’re welcome to share as much or as little as you want. I’m here to listen.`
+  `${getISTGreeting()}, I’m ${AI_NAME}. I’m here to offer a safe, judgment-free space to talk. Take your time — we can start whenever you feel ready.`,
+  
+  `${getISTGreeting()}. I’m ${AI_NAME}. Make yourself comfortable here. You don’t need to have everything figured out — we can talk it through together.`,
+  
+  `${getISTGreeting()}, I’m ${AI_NAME}. This is a quiet space just for you. Share as much or as little as you feel like.`,
+  
+  `${getISTGreeting()}. I’m ${AI_NAME}, your AI mental health support. There’s no rush here — we’ll go at your pace.`,
+  
+  `${getISTGreeting()}, I’m ${AI_NAME}. I’m here to listen, not judge. Whenever you’re ready, we can begin.`
 ];
+    function getISTGreeting() {
+  const hour = new Date().getHours();
 
+  if (hour >= 5 && hour < 12) {
+    return "Good morning";
+  } else if (hour >= 12 && hour < 17) {
+    return "Good afternoon";
+  } else if (hour >= 17 && hour < 22) {
+    return "Good evening";
+  } else {
+    return "Hi";
+  }
+}
 
 function addMessage(sender, text) {
   const div = document.createElement("div");
@@ -228,6 +244,7 @@ function addMessage(sender, text) {
   </script>
 </body>
 </html>
+
 
 
 
