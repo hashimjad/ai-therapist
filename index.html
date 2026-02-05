@@ -99,6 +99,18 @@
   flex-direction: column;
   gap: 8px;
 }
+    .dots::after {
+  content: '';
+  animation: dots 1.5s steps(3, end) infinite;
+}
+
+@keyframes dots {
+  0% { content: ''; }
+  33% { content: '.'; }
+  66% { content: '..'; }
+  100% { content: '...'; }
+}
+
 
   </style>
 </head>
@@ -108,6 +120,10 @@
     <h2>Your safe space to talk 💬 (Test Phase)</h2>
 
     <div id="chat"></div>
+    <div id="typingIndicator" style="display:none; font-size:14px; color:#666; margin-bottom:8px;">
+  Blue is typing<span class="dots">...</span>
+</div>
+
 
 <div class="input-area">
   <textarea id="userInput" placeholder="What’s going on right now?"></textarea>
@@ -179,7 +195,20 @@ function addMessage(sender, text) {
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
 }
+const typingIndicator = document.getElementById("typingIndicator");
 
+function showTyping() {
+  typingIndicator.style.display = "block";
+}
+
+function hideTyping() {
+  typingIndicator.style.display = "none";
+}
+
+// Random human-like delay (1–2.2 seconds)
+function getTypingDelay() {
+  return 1000 + Math.random() * 1200;
+}
     async function sendMessage() {
       const text = userInput.value.trim();
       if (!text) return;
@@ -213,15 +242,20 @@ function addMessage(sender, text) {
       }
 
       const data = await response.json();
-      const reply = data.choices[0].message.content;
+const reply = data.choices[0].message.content;
 
-      addMessage("AI Support", reply);
+showTyping();
 
-      // 🔹 Add AI reply to memory
-      conversationHistory.push({
-        role: "assistant",
-        content: reply
-      });
+setTimeout(() => {
+  hideTyping();
+  addMessage("AI Support", reply);
+
+  conversationHistory.push({
+    role: "assistant",
+    content: reply
+  });
+}, getTypingDelay());
+
 
       // 🔹 Keep memory short (prevents overload)
       if (conversationHistory.length > 12) {
@@ -244,8 +278,3 @@ function addMessage(sender, text) {
   </script>
 </body>
 </html>
-
-
-
-
-
